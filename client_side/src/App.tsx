@@ -80,7 +80,6 @@ const App: FC = () => {
   const [task, setTask] = useState<string>("");
   const [deadline, setDeadline] = useState<string>("");
   const [priority, setPriority] = useState<string>(Priority.LOW);
-  // const [todoList, setTodoList] = useState<ITask[]>([]);
   const dispatch = useDispatch();
   const todoList = useSelector((state: RootState) => state.todos);
 
@@ -111,7 +110,6 @@ const App: FC = () => {
         priority,
       };
       dispatch(addTodo(newTask));
-      // setTodoList([...todoList, newTask]);
       setDeadline("");
       setTask("");
     } else {
@@ -132,13 +130,7 @@ const App: FC = () => {
     alert(data);
   };
 
-  const completeTask = (taskNameToRemove: string): void => {
-    // setTodoList(
-    //   todoList.filter((task) => {
-    //     return task.taskName !== taskNameToRemove;
-    //   })
-    // );
-  };
+  const completeTask = (taskNameToRemove: string): void => {};
 
   return (
     <AppDiv>
