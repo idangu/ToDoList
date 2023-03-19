@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ChangeEvent, FC, SelectHTMLAttributes, useState } from "react";
 import styled from "styled-components";
-import { addTodo, cleanTodo } from "./action";
+import { addTodo, cleanTodo, removeItem } from "./action";
 import "./App.css";
 import TodoItem from "./components/TodoItem";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +22,7 @@ const Header = styled.div`
   background-color: tomato;
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
@@ -76,10 +77,16 @@ const Select = styled.select`
   border: 1px solid grey;
 `;
 
+const InputsAndButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 const App: FC = () => {
   const [task, setTask] = useState<string>("");
   const [deadline, setDeadline] = useState<string>("");
   const [priority, setPriority] = useState<string>(Priority.LOW);
+  const [tag, setTag] = useState<string>("Work");
   const dispatch = useDispatch();
   const todoList = useSelector((state: RootState) => state.todos);
 
@@ -96,6 +103,9 @@ const App: FC = () => {
       case InputName.priority:
         setPriority(event.target.value);
         break;
+      case InputName.tag:
+        setTag(event.target.value);
+        break;
 
       default:
         break;
@@ -108,6 +118,7 @@ const App: FC = () => {
         taskName: task,
         deadline,
         priority,
+        tag,
       };
       dispatch(addTodo(newTask));
       setDeadline("");
@@ -130,42 +141,55 @@ const App: FC = () => {
     alert(data);
   };
 
-  const completeTask = (taskNameToRemove: string): void => {};
+  const completeTask = (taskNameToRemove: string): void => {
+    dispatch(removeItem(taskNameToRemove));
+  };
 
   return (
     <AppDiv>
       <Header>
-        <InputContainer>
-          <Input
-            type="text"
-            value={task}
-            name="task"
-            onChange={handleChange}
-            placeholder="task.."
-          />
-          <Input
-            type="date"
-            name="deadline"
-            value={deadline}
-            onChange={handleChange}
-            placeholder="Deadline (inDays).."
-          />
-          <Select
-            name="priority"
-            value={priority}
-            id="priority"
-            onChange={handleChange}
-          >
-            <option value={Priority.LOW}>{Priority.LOW}</option>
-            <option value={Priority.MEDIUM}>{Priority.MEDIUM}</option>
-            <option value={Priority.HIGHEST}>{Priority.HIGHEST}</option>
-          </Select>
-        </InputContainer>
-        <InputContainer>
-          <Button onClick={addTask}>Add Task</Button>
-          <Button onClick={cleanAllTodoList}>Clean List</Button>
-          <Button onClick={getQuoteMotivation}>Give me Motivtion</Button>
-        </InputContainer>
+        <InputsAndButtonsContainer>
+          <InputContainer>
+            <Input
+              type="text"
+              value={task}
+              name={InputName.task}
+              onChange={handleChange}
+              placeholder="task.."
+            />
+            <Input
+              type="date"
+              name={InputName.deadline}
+              value={deadline}
+              onChange={handleChange}
+              placeholder="Deadline (inDays).."
+            />
+            <Select
+              name={InputName.priority}
+              value={priority}
+              id="priority"
+              onChange={handleChange}
+            >
+              <option value={Priority.LOW}>{Priority.LOW}</option>
+              <option value={Priority.MEDIUM}>{Priority.MEDIUM}</option>
+              <option value={Priority.HIGHEST}>{Priority.HIGHEST}</option>
+            </Select>
+            <Select
+              name={InputName.tag}
+              value={tag}
+              id="tag"
+              onChange={handleChange}
+            >
+              <option value="Work">Work</option>
+              <option value="Personal">Personal</option>
+            </Select>
+          </InputContainer>
+          <InputContainer>
+            <Button onClick={addTask}>Add Task</Button>
+            <Button onClick={cleanAllTodoList}>Clean List</Button>
+            <Button onClick={getQuoteMotivation}>Give me Motivtion</Button>
+          </InputContainer>
+        </InputsAndButtonsContainer>
       </Header>
       <TodoList>
         {todoList.map((task: ITask, key: number) => {

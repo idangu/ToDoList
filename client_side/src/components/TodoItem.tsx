@@ -64,6 +64,7 @@ const TodoItem = ({ task, completeTask }: Props) => {
         <Span color={task.priority}>{task.taskName}</Span>
         <Span color={task.priority}>{task.deadline}</Span>
         <Span color={task.priority}>{task.priority}</Span>
+        <Span color={task.priority}>{task.tag}</Span>
       </Content>
       <Button
         onClick={() => {

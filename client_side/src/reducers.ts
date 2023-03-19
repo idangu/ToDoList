@@ -12,6 +12,11 @@ export const todosReducer = (
       return [...state, action.payload];
       case ActionsNames.REMOVE_ALL_TODOS:
         return []
+        case ActionsNames.REMOVE_ITEM:
+          const todoListAfterItemRemoved = state.filter((item) => item.taskName !== action.payload);
+          return todoListAfterItemRemoved
+
+      
     default:
       return state;
   }

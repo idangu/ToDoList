@@ -7,6 +7,13 @@ export const addTodo = (todo: ITask): TodoAction => {
   };
 };
 
+export const removeItem = (taskNameToRemove: string): TodoAction => {
+  return {
+    type: 'REMOVE_ITEM',
+    payload: taskNameToRemove
+  };
+};
+
 export const cleanTodo = (): TodoAction => {
     return {
       type: 'REMOVE_ALL_TODOS',
